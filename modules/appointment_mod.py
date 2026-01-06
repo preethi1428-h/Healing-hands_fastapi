@@ -7,12 +7,20 @@ class Appointment(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
     phone = Column(String, nullable=False)
     date = Column(String, nullable=False)
     time = Column(String, nullable=False)
     service = Column(String, nullable=False)
-    status = Column(String, default="Pending") 
+    additional = Column(String, nullable=False)
 
-    user_id = Column(Integer, ForeignKey("users.id"))  
+    counselor_name = Column(String)
 
-    user = relationship("User", back_populates="appointment")  
+    provider_id = Column(Integer, ForeignKey("providers.id")) 
+
+    status = Column(String, default="Pending")
+    user_id = Column(Integer, ForeignKey("users.id"))
+    user=relationship("User",back_populates="appointments")
+
+    provider = relationship("Provider", back_populates="appointments")
+

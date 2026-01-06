@@ -13,10 +13,13 @@ router = APIRouter(prefix="/appointments", tags=["Appointments"])
 def create_appointment(app_data: AppointmentCreate, db: Session = Depends(get_db)):
     new_app = Appointment(
         name=app_data.name,
+        email=app_data.email,
+        CounselorName=app_data.CounselorName,
         phone=app_data.phone,
         date=app_data.date,
         time=app_data.time,
         service=app_data.service,
+        additional=app_data.additional,
         user_id=app_data.user_id
     )
     db.add(new_app)
@@ -24,14 +27,17 @@ def create_appointment(app_data: AppointmentCreate, db: Session = Depends(get_db
     db.refresh(new_app)
     return new_app
 
+@router.get("/provider/{provider_id}", response_model=list[AppointmentResponse])
+def get_appointments_for_provider(provider_id: int, db: Session = Depends(get_db)):
+    return db.query(Appointment).filter(Appointment.provider_id == provider_id).all()
 
-# GET ALL
+
 @router.get("/", response_model=list[AppointmentResponse])
 def get_all_appointments(db: Session = Depends(get_db)):
     return db.query(Appointment).all()
 
 
-# GET ONE
+
 @router.get("/{appointment_id}", response_model=AppointmentResponse)
 def get_one_appointment(appointment_id: int, db: Session = Depends(get_db)):
     appointment = db.query(Appointment).filter(Appointment.id == appointment_id).first()
@@ -41,8 +47,20 @@ def get_one_appointment(appointment_id: int, db: Session = Depends(get_db)):
 
     return appointment
 
+@router.get("/user/{user_id}", response_model=list[AppointmentResponse])
+def get_appointments_by_user(user_id: int, db: Session = Depends(get_db)):
+    appointments = db.query(Appointment).filter(Appointment.user_id == user_id).all()
 
-# DELETE
+    for app in appointments:
+        if app.email is None:
+            app.email = "unknown@healinghands.com"
+        if app.additional is None:
+            app.additional = ""
+
+    return appointments
+
+
+
 @router.delete("/{appointment_id}")
 def delete_appointment(appointment_id: int, db: Session = Depends(get_db)):
     appointment = db.query(Appointment).filter(Appointment.id == appointment_id).first()
@@ -62,8 +80,9 @@ def get_appointments_by_user(user_id: int, db: Session = Depends(get_db)):
     return appointments
 
 # accept
-@router.put("/{appointment_id}/accept")
-def accept_appointment(appointment_id: int, db: Session = Depends(get_db)):
+
+@router.put("/{appointment_id}/provider/accept")
+def provider_accept(appointment_id: int, db: Session = Depends(get_db)):
     appointment = db.query(Appointment).filter(Appointment.id == appointment_id).first()
 
     if not appointment:
@@ -71,13 +90,37 @@ def accept_appointment(appointment_id: int, db: Session = Depends(get_db)):
 
     appointment.status = "Accepted"
     db.commit()
-    db.refresh(appointment)
+    return {"message": "Appointment Accepted"}
 
-    return {"message": "Appointment Accepted", "appointment_id": appointment.id}
+# @router.put("/{appointment_id}/accept")
+# def accept_appointment(appointment_id: int, db: Session = Depends(get_db)):
+#     appointment = db.query(Appointment).filter(Appointment.id == appointment_id).first()
+
+#     if not appointment:
+#         raise HTTPException(status_code=404, detail="Appointment not found")
+
+#     appointment.status = "Accepted"
+#     db.commit()
+#     db.refresh(appointment)
+
+#     return {"message": "Appointment Accepted", "appointment_id": appointment.id}
 
 #reject
-@router.put("/{appointment_id}/reject")
-def reject_appointment(appointment_id: int, db: Session = Depends(get_db)):
+# @router.put("/{appointment_id}/reject")
+# def reject_appointment(appointment_id: int, db: Session = Depends(get_db)):
+#     appointment = db.query(Appointment).filter(Appointment.id == appointment_id).first()
+
+#     if not appointment:
+#         raise HTTPException(status_code=404, detail="Appointment not found")
+
+#     appointment.status = "Rejected"
+#     db.commit()
+#     db.refresh(appointment)
+
+#     return {"message": "Appointment Rejected", "appointment_id": appointment.id}
+
+@router.put("/{appointment_id}/provider/reject")
+def provider_reject(appointment_id: int, db: Session = Depends(get_db)):
     appointment = db.query(Appointment).filter(Appointment.id == appointment_id).first()
 
     if not appointment:
@@ -85,7 +128,6 @@ def reject_appointment(appointment_id: int, db: Session = Depends(get_db)):
 
     appointment.status = "Rejected"
     db.commit()
-    db.refresh(appointment)
+    return {"message": "Appointment Rejected"}
 
-    return {"message": "Appointment Rejected", "appointment_id": appointment.id}
 

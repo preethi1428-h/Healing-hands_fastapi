@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from db.database import Base
 
+
 class User(Base):
     __tablename__ = "users"
 
@@ -11,7 +12,6 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
 
-    # Relationship with Appointment
     appointment = relationship("Appointment", back_populates="user")  
 
 

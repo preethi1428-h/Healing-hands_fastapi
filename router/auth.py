@@ -6,7 +6,7 @@ from schemas.schemas import UserRegister, UserLogin, UserResponse
 
 router = APIRouter(prefix="/auth", tags=["Login"])
 
-# REGISTER
+ # REGISTER
 @router.post("/register", response_model=UserResponse)
 def register_user(user: UserRegister, db: Session = Depends(get_db)):
 
@@ -18,8 +18,9 @@ def register_user(user: UserRegister, db: Session = Depends(get_db)):
     new_user = User(
         name=user.name,
         email=user.email,
-        password=user.password,
-        phone=user.phone     
+        phone=user.phone, 
+        password=user.password
+           
     )
 
     db.add(new_user)

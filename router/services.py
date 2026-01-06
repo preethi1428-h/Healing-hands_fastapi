@@ -6,7 +6,7 @@ from schemas.services_schemas import ServiceCreate, ServiceUpdate, ServiceRespon
 
 router = APIRouter(prefix="/services", tags=["Services"])
 
-# CREATE SERVICE
+
 @router.post("/", response_model=ServiceResponse)
 def create_service(service: ServiceCreate, db: Session = Depends(get_db)):
     new_service = Service(
@@ -20,14 +20,14 @@ def create_service(service: ServiceCreate, db: Session = Depends(get_db)):
     return new_service
 
 
-# GET ALL SERVICES
+
 @router.get("/", response_model=list[ServiceResponse])
 def get_services(db: Session = Depends(get_db)):
     services = db.query(Service).all()
     return services
 
 
-# GET SERVICE BY ID
+
 @router.get("/{service_id}", response_model=ServiceResponse)
 def get_single_service(service_id: int, db: Session = Depends(get_db)):
     service = db.query(Service).filter(Service.id == service_id).first()
@@ -38,7 +38,6 @@ def get_single_service(service_id: int, db: Session = Depends(get_db)):
     return service
 
 
-# UPDATE SERVICE
 @router.put("/{service_id}", response_model=ServiceResponse)
 def update_service(service_id: int, service_data: ServiceUpdate, db: Session = Depends(get_db)):
     service = db.query(Service).filter(Service.id == service_id).first()
@@ -59,7 +58,6 @@ def update_service(service_id: int, service_data: ServiceUpdate, db: Session = D
     return service
 
 
-# DELETE SERVICE
 @router.delete("/{service_id}")
 def delete_service(service_id: int, db: Session = Depends(get_db)):
     service = db.query(Service).filter(Service.id == service_id).first()

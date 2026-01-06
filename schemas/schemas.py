@@ -4,7 +4,7 @@ class UserRegister(BaseModel):
     name: str
     email: str
     password: str
-    phone: str  
+    phone: str
 
 
 class UserLogin(BaseModel):
@@ -16,10 +16,10 @@ class UserResponse(BaseModel):
     id: int
     name: str
     email: str
+    phone: str
 
-    model_config = {
-        "from_attributes": True   
-    }
+    model_config = {"from_attributes": True}
+
 
 
 
