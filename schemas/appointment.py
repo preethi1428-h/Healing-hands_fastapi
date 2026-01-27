@@ -11,6 +11,7 @@ class AppointmentCreate(BaseModel):
     additional:str
     user_id: int
     provider_id: int  
+    counselor_name: Optional[str] = None
 
 
 
@@ -24,6 +25,8 @@ class AppointmentResponse(BaseModel):
     time: str
     service: str
     additional:Optional[str]=None
+    status: str 
+    counselor_name: Optional[str] = None
     user_id: Optional[int] = None
     provider_id: int | None = None
 

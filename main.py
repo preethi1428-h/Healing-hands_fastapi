@@ -4,6 +4,7 @@ from db.database import Base,engine
 from modules import appointment_mod, provider_mod
 
 
+
  
 app = FastAPI()
 

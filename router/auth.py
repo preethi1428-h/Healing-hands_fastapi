@@ -26,9 +26,9 @@ def register_user(user: UserRegister, db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return new_user
+    return new_user 
 
-
+ 
 # LOGIN
 @router.post("/login")
 def login_user(user: UserLogin, db: Session = Depends(get_db)):

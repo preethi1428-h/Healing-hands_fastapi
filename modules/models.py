@@ -12,13 +12,16 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
 
-    appointment = relationship("Appointment", back_populates="user")  
+    appointments = relationship("Appointment", back_populates="user")  
 
-
+ 
 class Service(Base):
-    __tablename__ = "services"
+    __tablename__ = "services" 
+
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     description = Column(String)
     icon = Column(String)
+    
+    providers = relationship("Provider", back_populates="service")
