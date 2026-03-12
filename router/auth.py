@@ -4,7 +4,10 @@ from db.database import get_db
 from modules.models import User
 from schemas.schemas import UserRegister, UserLogin, UserResponse
 
-router = APIRouter(prefix="/auth", tags=["Login"])
+
+
+
+router = APIRouter(prefix="/auth", tags=["User Login"])
 
  # REGISTER
 @router.post("/register", response_model=UserResponse)
@@ -20,6 +23,7 @@ def register_user(user: UserRegister, db: Session = Depends(get_db)):
         email=user.email,
         phone=user.phone, 
         password=user.password
+
            
     )
 
@@ -43,3 +47,4 @@ def login_user(user: UserLogin, db: Session = Depends(get_db)):
         "email": db_user.email,
         "id": db_user.id
     }
+

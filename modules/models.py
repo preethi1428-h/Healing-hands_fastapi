@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String , ForeignKey
 from sqlalchemy.orm import relationship
 from db.database import Base
 
@@ -21,7 +21,9 @@ class Service(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
-    description = Column(String)
-    icon = Column(String)
-    
+
+
     providers = relationship("Provider", back_populates="service")
+    
+
+

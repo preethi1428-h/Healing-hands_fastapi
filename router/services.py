@@ -4,6 +4,7 @@ from db.database import get_db
 from modules.models import Service 
 from schemas.services_schemas import ServiceCreate, ServiceUpdate, ServiceResponse
 
+
 router = APIRouter(prefix="/services", tags=["Services"])
 
 

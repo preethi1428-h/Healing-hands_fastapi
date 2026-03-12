@@ -11,16 +11,17 @@ class Appointment(Base):
     phone = Column(String, nullable=False)
     date = Column(String, nullable=False)
     time = Column(String, nullable=False)
-    service = Column(String, nullable=False)
-    additional = Column(String, nullable=False)
+    additional = Column(String, nullable=True)
 
-    counselor_name = Column(String)
-
-    provider_id = Column(Integer, ForeignKey("providers.id")) 
+    service_id = Column(Integer, ForeignKey("services.id"))
+    provider_id = Column(Integer, ForeignKey("providers.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
 
     status = Column(String, default="Pending")
-    user_id = Column(Integer, ForeignKey("users.id"))
-    user=relationship("User",back_populates="appointments")
 
-    provider = relationship("Provider", back_populates="appointments")
+    # Relationships
+    service = relationship("Service")
+    provider = relationship("Provider")
+    user = relationship("User")
+
 
